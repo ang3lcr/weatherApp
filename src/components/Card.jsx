@@ -3,21 +3,28 @@ import { useEffect, useState } from "react";
 
 function Card() {
   const [weather, setWeather] = useState({});
-  const [isDecimeters, setIsDecimeters] = useState(true);
-  const [isHectograms, setIsHectograms] = useState(true);
+  const [isCelsius, setIsCelsius] = useState(true);
+  const [isFarenheit, setIsFarenheit] = useState(true);
 
-
-
-  let weatherUrl = "https://api.openweathermap.org/data/2.5/weather?lat=10&lon=11&appid=$953649b7d1a1947b183b4d9462971683"
-
+  let weatherUrl;
+  let apiKey = "953649b7d1a1947b183b4d9462971683"
   const success = (position) => {
+
+
+
+    function changeUnits(){
+      setIsCelsius(!isCelsius)
+      setIsFarenheit(!isFarenheit)
+    }
+
+
 
     const latitude = position.coords.latitude
     const longitude = position.coords.longitude
+    weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`
 
-
-    weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=953649b7d1a1947b183b4d9462971683`
   }
+
 
   navigator.geolocation.getCurrentPosition(success)
 
@@ -28,10 +35,8 @@ function Card() {
     });
   }, []);
 
-  const changeUnits = () => {
-    setIsDecimeters(!isDecimeters);
-    setIsHectograms(!isHectograms);
-  };
+
+console.log(weather);
 
 
   return (
@@ -41,11 +46,27 @@ function Card() {
 
 
     <h1>Weather App</h1>
-    <h2>{weather.name}, {weather.sys?.country}</h2>
+    <h2>{weather.name}, {weather?.sys?.country}</h2>
+
+    <div className="container">
+
+    <div className="element-1">
+      <img className="icon-img" src={`http://openweathermap.org/img/wn/${weather.weather[0]?.icon}@2x.png`} />
+    </div>
+
+
+    <div className="element-2">
+      <ul>
+        <li>Wind Speed: {weather.wind?.speed}</li>
+        <li>Clouds: {weather.clouds?.all}%</li>
+        <li>Pressure: {weather.main?.pressure} mb</li>
+        </ul>
+    </div>
+    </div>
 
 
 
-
+    <button>°F / °C</button>
 
     </div>
 
