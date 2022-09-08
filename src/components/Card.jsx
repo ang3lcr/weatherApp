@@ -12,6 +12,7 @@ function Card() {
   let apiKey = "953649b7d1a1947b183b4d9462971683"
   let weatherUrl;
 
+/*
   const success = (position) => {
     console.log(position);
     console.log("exito");
@@ -25,13 +26,22 @@ function Card() {
 
     })
   }, [])
-
+*/
 
 useEffect(() => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`).then((res) => {
-    setWeather(res.data);
-      }
-);
+  navigator.geolocation.getCurrentPosition(success);
+
+  function success(pos) {
+    const coords = pos.coords;
+
+
+
+  axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${apiKey}&units=metric`).then((res) => {
+  setWeather(res.data)});
+
+}
+
+
 }, [])
 
 
